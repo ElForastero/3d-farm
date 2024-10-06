@@ -1,0 +1,4 @@
+- name: Install and configure Helper Script
+  hosts: k1max
+  roles:
+    - role: k1/install-helper-script

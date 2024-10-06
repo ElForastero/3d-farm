@@ -1,0 +1,116 @@
+- name: Ping hosts
+  ansible.builtin.ping:
+
+- name: Install pexpect python extension
+  ansible.builtin.pip:
+    name: pexpect
+
+- name: Disable colored output in Hepler Script
+  ansible.builtin.blockinfile:
+    dest: /usr/data/helper-script/scripts/paths.sh
+    state: present
+    insertafter: EOF
+    block: |
+      # Disable colored output
+      white=""
+      blue=""
+      cyan=""
+      yellow=""
+      green=""
+      darkred=""
+      red=""
+
+- name: Download Helper Script
+  ansible.builtin.git:
+    repo: "https://github.com/Guilouz/Creality-Helper-Script.git"
+    dest: "/usr/data/helper-script"
+    version: "{{ helper_script_version }}"
+    update: false
+
+- name: Install Moonraker and Nginx
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "1\\) Install Moonraker and Nginx": "1"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install Entware
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "4\\) Install Entware": "4"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install Klipper Gcode Shell Command
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "5\\) Install Klipper Gcode Shell Command": "5"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install Buzzer Support
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "7\\) Install Buzzer Support": "7"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install M600 Support
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "14\\) Install M600 Support": "14"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+#
+# - name: Debug
+#   ansible.builtin.debug:
+#     msg: "{{cmd_result}}"
+
+- name: Enable colored output in Hepler Script
+  ansible.builtin.blockinfile:
+    dest: /usr/data/helper-script/scripts/paths.sh
+    state: absent
+    block: |
+      # Disable colored output
+      white=""
+      blue=""
+      cyan=""
+      yellow=""
+      green=""
+      darkred=""
+      red=""

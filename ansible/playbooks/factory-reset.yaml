@@ -1,0 +1,4 @@
+- name: Reset Factory Settings
+  hosts: k1max
+  roles:
+    - role: k1/factory-reset

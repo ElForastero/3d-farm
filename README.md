@@ -1,3 +1,7 @@
+### Routine automation
+
+![Example](/example.png)
+
 ### Reset to Factory Settings
 
 According to the Helper Script guides and Creality's recommendations, it's strongly advised to perform a factory reset before each firmware upgrade.
@@ -28,7 +32,8 @@ ansible-playbook -i ./inventory/k1.ini playbooks/install-helper-script.yaml
 
 ### Git Backup Plugin
 
-Make sure to clear the repo history before installing.
+> [!WARNING]
+> Make sure to clear the repo history before installing.
 
 1. Create cr-{ansible_hostname} repos for each printer
 2. Create a Fine-grained Personal Access Token allowing access to these repos

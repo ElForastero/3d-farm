@@ -2,13 +2,6 @@
   ansible.builtin.pip:
     name: pexpect
 
-- name: Download Helper Script
-  ansible.builtin.git:
-    repo: "https://github.com/Guilouz/Creality-Helper-Script.git"
-    dest: "/usr/data/helper-script"
-    version: "{{ helper_script_version }}"
-    update: false
-
 - name: Install Moonraker and Nginx
   ansible.builtin.expect:
     command: sh /usr/data/helper-script/helper.sh
@@ -17,6 +10,20 @@
     responses:
       "1\\) \\[Install\\] Menu": "1"
       "1\\) Install Moonraker and Nginx": "1"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install Fluidd (port 4408)
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "2\\) Install Fluidd": "2"
       "Are you sure you want to install": "y"
       "installed successfully": "q"
       "already installed": "q"
@@ -37,6 +44,11 @@
   register: cmd_result
   changed_when: '"already installed" not in cmd_result.stdout'
 
+- name: OPKG update
+  ansible.builtin.shell:
+    cmd: opkg update
+  changed_when: false
+
 - name: Install Klipper Gcode Shell Command
   ansible.builtin.expect:
     command: sh /usr/data/helper-script/helper.sh
@@ -46,6 +58,21 @@
       "1\\) \\[Install\\] Menu": "1"
       "5\\) Install Klipper Gcode Shell Command": "5"
       "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install Klipper Adaptive Meshing & Purging
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "6\\) Install Klipper Adaptive Meshing & Purging": "6"
+      "Are you sure you want to install": "y"
+      "Do you want to enable needed macros for PrusaSlicer": "n"
       "installed successfully": "q"
       "already installed": "q"
   register: cmd_result
@@ -149,28 +176,6 @@
   register: cmd_result
   changed_when: '"already installed" not in cmd_result.stdout'
 
-# - name: Install Git Backup
-#   ansible.builtin.expect:
-#     command: sh /usr/data/helper-script/helper.sh
-#     echo: true
-#     timeout: 60
-#     responses:
-#       "1\\) \\[Install\\] Menu": "1"
-#       "15\\) Install Git Backup": "15"
-#       "Are you sure you want to install": "y"
-#       "GitHub username": "{{github_user}}"
-#       "GitHub email address": "{{github_email}}"
-#       "GitHub repository name": "cr-{{inventory_hostname}}"
-#       "GitHub branch name": "{{github_branch}}"
-#       "GitHub personal access token": "{{github_personal_access_token}}"
-#       "installed successfully": "q"
-#       "already installed": "q"
-#       "Your repository already contains commits and files cannot be merged": "q"
-#   register: cmd_result
-#   changed_when: '"already installed" not in cmd_result.stdout'
-#   failed_when: '"files cannot be merged" in cmd_result.stdout'
-#   no_log: true
-
 - name: Install Moonraker Timelapse
   ansible.builtin.expect:
     command: sh /usr/data/helper-script/helper.sh
@@ -193,6 +198,20 @@
     responses:
       "1\\) \\[Install\\] Menu": "1"
       "18\\) Install USB Camera Support": "18"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install Mobileraker Companion
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "22\\) Install Mobileraker Companion": "22"
       "Are you sure you want to install": "y"
       "installed successfully": "q"
       "already installed": "q"

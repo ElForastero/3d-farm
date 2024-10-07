@@ -1,5 +1,0 @@
-- name: Update configs
-  hosts: printers
-  roles:
-    - role: common/ping
-    - role: k1/update-configs

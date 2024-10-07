@@ -7,5 +7,5 @@
 - name: Perform a factory reset
   ansible.builtin.shell:
     cmd: /etc/init.d/S58factoryreset reset
-    poll: 0
+  poll: 0
   when: confirm_factory_reset.user_input | bool

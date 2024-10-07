@@ -1,0 +1,6 @@
+- name: Download Helper Script
+  ansible.builtin.git:
+    repo: "https://github.com/Guilouz/Creality-Helper-Script.git"
+    dest: "/usr/data/helper-script"
+    version: "{{ helper_script_version }}"
+    update: false

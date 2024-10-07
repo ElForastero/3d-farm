@@ -2,6 +2,7 @@
   hosts: printers
   roles:
     - role: common/ping
+    - role: k1/download-helper-script
     - role: k1/common/disable-colored-output
     - role: k1/install-helper-script
     - role: k1/common/enable-colored-output

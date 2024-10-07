@@ -1,7 +1,7 @@
-- name: Install and configure Helper Script
+- name: Update Helper Script
   hosts: printers
   roles:
     - role: common/ping
     - role: k1/common/disable-colored-output
-    - role: k1/install-helper-script
+    - role: k1/update-helper-script
     - role: k1/common/enable-colored-output

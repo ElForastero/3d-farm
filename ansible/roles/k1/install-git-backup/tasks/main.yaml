@@ -1,0 +1,21 @@
+- name: Install Git Backup
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 60
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "15\\) Install Git Backup": "15"
+      "Are you sure you want to install": "y"
+      "GitHub username": "{{github_user}}"
+      "GitHub email address": "{{github_email}}"
+      "GitHub repository name": "cr-{{inventory_hostname}}"
+      "GitHub branch name": "{{github_branch}}"
+      "GitHub personal access token": "{{github_personal_access_token}}"
+      "installed successfully": "q"
+      "already installed": "q"
+      "Your repository already contains commits and files cannot be merged": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+  failed_when: '"files cannot be merged" in cmd_result.stdout'
+  no_log: true

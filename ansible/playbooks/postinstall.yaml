@@ -1,0 +1,6 @@
+- name: Preparational tasks
+  hosts: printers
+  roles:
+    - role: common/ping
+    - role: common/copy-ssh-keys
+    - role: k1/update-datetime

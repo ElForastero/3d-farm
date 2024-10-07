@@ -1,0 +1,63 @@
+- name: Confirm ERCF
+  ansible.builtin.pause:
+    prompt: "Do you want to install ERCF?"
+  register: ercf
+- ansible.builtin.set_fact:
+    confirm_ercf: "{{ercf.user_input | bool}}"
+- ansible.builtin.set_fact:
+    duplicate_pin_override: "{{ duplicate_pin_override + ['PC15'] }}"
+    includes: "{{ includes + ['[include custom/ercf-filament-sensor.cfg]'] }}"
+  when: confirm_ercf
+
+- name: Confirm Bento Box
+  ansible.builtin.pause:
+    prompt: "Do you want to install Bento Box?"
+  register: bento
+- ansible.builtin.set_fact:
+    confirm_bento: "{{bento.user_input | bool}}"
+- ansible.builtin.set_fact:
+    duplicate_pin_override: "{{ duplicate_pin_override + ['PA0'] }}"
+    includes: "{{ includes + ['[include custom/bento-box.cfg]'] }}"
+  when: confirm_bento
+
+- name: Confirm Bed Fans
+  ansible.builtin.pause:
+    prompt: "Do you want to install Bed Fans?"
+  register: bed_fans
+- ansible.builtin.set_fact:
+    confirm_bed_fans: "{{bed_fans.user_input | bool}}"
+- ansible.builtin.set_fact:
+    includes: "{{ includes + ['[include custom/bed-fans.cfg]'] }}"
+  when: confirm_bed_fans
+
+- name: Copy ercf-filament-sensor.cfg
+  ansible.builtin.copy:
+    src: ercf-filament-sensor.cfg
+    dest: "{{configs_path}}/custom/"
+  when: confirm_ercf
+
+- name: Copy bento-box.cfg
+  ansible.builtin.copy:
+    src: bento-box.cfg
+    dest: "{{configs_path}}/custom/"
+  when: confirm_bento
+
+- name: Copy bed-fans.cfg
+  ansible.builtin.copy:
+    src: bed-fans.cfg
+    dest: "{{configs_path}}/custom/"
+  when: confirm_bed_fans
+
+- ansible.builtin.set_fact:
+    includes_content: "{{ includes | join('\n') }}"
+
+- name: Update printer.cfg
+  ansible.builtin.blockinfile:
+    path: "{{configs_path}}/printer.cfg"
+    insertafter: "\\[include"
+    prepend_newline: true
+    block: |
+      {{ includes_content }}
+
+      [duplicate_pin_override]
+      pins: {{ duplicate_pin_override | unique | join(', ') }}

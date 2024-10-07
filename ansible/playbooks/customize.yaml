@@ -1,0 +1,8 @@
+- name: Customize configs
+  hosts: printers
+  vars:
+    # Default pins from helper-script included
+    duplicate_pin_override: [PC0, PC5, PB2, PC6, ADC_TEMPERATURE]
+    includes: []
+  roles:
+    - role: k1/common/configure

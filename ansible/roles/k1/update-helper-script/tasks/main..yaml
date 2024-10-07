@@ -1,0 +1,10 @@
+- name: Update Helper Script
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "Do you want to update now?": "y"
+  register: cmd_result
+  changed_when: '"Do you want to update" in cmd_result.stdout'
+  when: "'new script version is available' in cmd_result.stdout"

@@ -1,0 +1,4 @@
+- name: Install Git Backup Plugin
+  hosts: printers
+  roles:
+    - role: k1/install-git-backup

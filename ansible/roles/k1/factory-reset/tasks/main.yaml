@@ -1,6 +1,3 @@
-- name: Ping hosts
-  ansible.builtin.ping:
-
 - name: Confirm
   ansible.builtin.pause:
     prompt: "Are you sure you want te perform a factory reset?"

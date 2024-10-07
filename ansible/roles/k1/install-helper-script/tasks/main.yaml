@@ -1,24 +1,6 @@
-- name: Ping hosts
-  ansible.builtin.ping:
-
 - name: Install pexpect python extension
   ansible.builtin.pip:
     name: pexpect
-
-- name: Disable colored output in Hepler Script
-  ansible.builtin.blockinfile:
-    dest: /usr/data/helper-script/scripts/paths.sh
-    state: present
-    insertafter: EOF
-    block: |
-      # Disable colored output
-      white=""
-      blue=""
-      cyan=""
-      yellow=""
-      green=""
-      darkred=""
-      red=""
 
 - name: Download Helper Script
   ansible.builtin.git:
@@ -83,6 +65,76 @@
   register: cmd_result
   changed_when: '"already installed" not in cmd_result.stdout'
 
+- name: Install Nozzle Cleaning Fan Control
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "8\\) Install Nozzle Cleaning Fan Control": "8"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install Fans Control Macros
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "9\\) Install Fans Control Macros": "9"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install Improved Shapers Calibrations
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "10\\) Install Improved Shapers Calibrations": "10"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install Useful Macros
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "11\\) Install Useful Macros": "11"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install Save Z-Offset Macros
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "12\\) Install Save Z-Offset Macros": "12"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
 - name: Install M600 Support
   ansible.builtin.expect:
     command: sh /usr/data/helper-script/helper.sh
@@ -96,21 +148,67 @@
       "already installed": "q"
   register: cmd_result
   changed_when: '"already installed" not in cmd_result.stdout'
-#
-# - name: Debug
-#   ansible.builtin.debug:
-#     msg: "{{cmd_result}}"
 
-- name: Enable colored output in Hepler Script
-  ansible.builtin.blockinfile:
-    dest: /usr/data/helper-script/scripts/paths.sh
-    state: absent
-    block: |
-      # Disable colored output
-      white=""
-      blue=""
-      cyan=""
-      yellow=""
-      green=""
-      darkred=""
-      red=""
+# - name: Install Git Backup
+#   ansible.builtin.expect:
+#     command: sh /usr/data/helper-script/helper.sh
+#     echo: true
+#     timeout: 60
+#     responses:
+#       "1\\) \\[Install\\] Menu": "1"
+#       "15\\) Install Git Backup": "15"
+#       "Are you sure you want to install": "y"
+#       "GitHub username": "{{github_user}}"
+#       "GitHub email address": "{{github_email}}"
+#       "GitHub repository name": "cr-{{inventory_hostname}}"
+#       "GitHub branch name": "{{github_branch}}"
+#       "GitHub personal access token": "{{github_personal_access_token}}"
+#       "installed successfully": "q"
+#       "already installed": "q"
+#       "Your repository already contains commits and files cannot be merged": "q"
+#   register: cmd_result
+#   changed_when: '"already installed" not in cmd_result.stdout'
+#   failed_when: '"files cannot be merged" in cmd_result.stdout'
+#   no_log: true
+
+- name: Install Moonraker Timelapse
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "16\\) Install Moonraker Timelapse": "16"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Install USB Camera Support
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "1\\) \\[Install\\] Menu": "1"
+      "18\\) Install USB Camera Support": "18"
+      "Are you sure you want to install": "y"
+      "installed successfully": "q"
+      "already installed": "q"
+  register: cmd_result
+  changed_when: '"already installed" not in cmd_result.stdout'
+
+- name: Enable camera settings in Moonraker
+  ansible.builtin.expect:
+    command: sh /usr/data/helper-script/helper.sh
+    echo: true
+    timeout: 600
+    responses:
+      "5\\) \\[Tools\\] Menu": "5"
+      "4\\) Enable camera settings in Moonraker": "4"
+      "want to enable": "y"
+      "have been enabled": "q"
+      "alredy enabled": "q"
+  register: cmd_result
+  changed_when: '"alredy enabled" not in cmd_result.stdout'

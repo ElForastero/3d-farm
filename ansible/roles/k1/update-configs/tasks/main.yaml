@@ -1,0 +1,28 @@
+# - name: Update Moonraker cors_domains
+#   ansible.builtin.lineinfile:
+#     path: /usr/data/printer_data/config/moonraker.conf
+#     insertafter: "cors_domains:"
+#     line: "  *.loc"
+
+- name: Update Klipper config
+  ansible.builtin.lineinfile:
+    path: /usr/data/printer_data/config/printer.cfg
+    backup: true
+    firstmatch: true
+    # backrefs: true
+    regexp: "^\\[{{item.section}}\\][^(\n\n)]*{{ item.key }}:.*$"
+    line: "{{ item.key }}: {{item.value}} # test"
+    insertafter: "^\\[{{ item.section }}\\]$"
+  loop:
+    # - { section: "tmc2209 stepper_x", key: "run_current", value: "1.2" }
+    # - { section: "tmc2209 stepper_y", key: "run_current", value: "1.2" }
+    - { section: "stepper_z", key: "microsteps", value: "256" }
+# - name: Update Klipper config
+#   ansible.community.ini_file:
+#     path: /usr/data/printer_data/config/printer.cfg
+#     backup: true
+
+#   loop:
+#     - { section: "tmc2209 stepper_x", key: "run_current", value: "1.2" }
+#     - { section: "tmc2209 stepper_y", key: "run_current", value: "1.2" }
+#     - { section: "stepper_z", key: "microsteps", value: "256" }

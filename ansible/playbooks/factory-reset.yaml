@@ -1,4 +1,5 @@
 - name: Reset Factory Settings
-  hosts: k1max
+  hosts: printers
   roles:
+    - role: common/ping
     - role: k1/factory-reset

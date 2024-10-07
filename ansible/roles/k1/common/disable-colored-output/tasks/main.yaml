@@ -1,0 +1,14 @@
+- name: Disable colored output in Hepler Script
+  ansible.builtin.blockinfile:
+    dest: /usr/data/helper-script/scripts/paths.sh
+    state: present
+    insertafter: "^(\\s*)red=`echo \\-en"
+    block: |
+      # Disable colored output
+      white=""
+      blue=""
+      cyan=""
+      yellow=""
+      green=""
+      darkred=""
+      red=""
